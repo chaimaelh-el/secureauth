@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Logs | SecureAuth{% endblock %}
+{% block content %}
+<section class="card">
+    <h1>Journal de securite</h1>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Utilisateur</th>
+                    <th>Action</th>
+                    <th>Statut</th>
+                    <th>Details</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in logs %}
+                <tr>
+                    <td>{{ entry["id"] }}</td>
+                    <td>{{ entry["username"] or "-" }}</td>
+                    <td>{{ entry["action"] }}</td>
+                    <td>{{ entry["status"] }}</td>
+                    <td>{{ entry["details"] }}</td>
+                    <td>{{ entry["created_at"] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">Aucun log disponible.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

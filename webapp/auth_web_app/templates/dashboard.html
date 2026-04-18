@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | SecureAuth{% endblock %}
+{% block content %}
+<section class="panel-grid">
+    <article class="card">
+        <p class="eyebrow">Session active</p>
+        <h1>Bienvenue {{ user["username"] }}</h1>
+        <p>Votre compte a passe l'etape mot de passe puis la double authentification OTP.</p>
+    </article>
+    <article class="card">
+        <h2>Informations du compte</h2>
+        <ul class="feature-list">
+            <li>Email: {{ user["email"] }}</li>
+            <li>Tentatives echouees: {{ user["failed_attempts"] }}</li>
+            <li>Compte bloque: {{ "Oui" if user["is_blocked"] else "Non" }}</li>
+            <li>Date de creation: {{ user["created_at"] }}</li>
+        </ul>
+    </article>
+</section>
+{% endblock %}

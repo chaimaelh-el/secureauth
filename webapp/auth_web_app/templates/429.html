@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}429 - Trop de requêtes{% endblock %}
+{% block content %}
+<div style="text-align:center; padding: 4rem 2rem;">
+  <h1 style="font-size:3rem;">429</h1>
+  <p>Trop de tentatives. Veuillez patienter quelques minutes avant de réessayer.</p>
+  <a href="{{ url_for('index') }}" class="btn">Retour à l'accueil</a>
+</div>
+{% endblock %}

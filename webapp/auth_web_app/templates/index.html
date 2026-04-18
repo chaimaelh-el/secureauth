@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Accueil | SecureAuth{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-copy">
+        <p class="eyebrow">Application web d'authentification securisee</p>
+        <div class="hero-badge">Python + SQLite + OTP temps reel</div>
+        <h1>Authentification serieuse, interface plus propre, parcours complet.</h1>
+        <p class="lead">
+            Ce projet implemente un moteur Python avec SQLite, verification de mot de passe,
+            double authentification OTP et journalisation des evenements de securite.
+        </p>
+        <div class="hero-actions">
+            <a class="button button-primary" href="{{ url_for('register') }}">Creer un compte</a>
+            <a class="button button-secondary" href="{{ url_for('login') }}">Se connecter</a>
+        </div>
+        <div class="hero-metrics">
+            <div class="metric">
+                <strong>3 essais</strong>
+                <span>avant blocage</span>
+            </div>
+            <div class="metric">
+                <strong>30 sec</strong>
+                <span>duree OTP</span>
+            </div>
+            <div class="metric">
+                <strong>100%</strong>
+                <span>journalise</span>
+            </div>
+        </div>
+    </div>
+    <div class="card status-card">
+        <div class="status-topline">
+            <span class="status-dot"></span>
+            <span>Security modules online</span>
+        </div>
+        <h2>Fonctions couvertes</h2>
+        <ul class="feature-list">
+            <li>Hash bcrypt des mots de passe</li>
+            <li>Verification de robustesse cote client et serveur</li>
+            <li>Blocage automatique apres 3 echecs</li>
+            <li>OTP 6 chiffres avec expiration en 30 secondes</li>
+            <li>Logs des connexions et incidents de securite</li>
+        </ul>
+        <div class="glass-strip">
+            <span>Register</span>
+            <span>Login</span>
+            <span>2FA</span>
+            <span>Audit Logs</span>
+        </div>
+    </div>
+</section>
+
+<section class="info-band">
+    <article class="info-card">
+        <p class="eyebrow">Protection mot de passe</p>
+        <h2>Analyse instantanee cote client et validation stricte cote serveur.</h2>
+    </article>
+    <article class="info-card">
+        <p class="eyebrow">Traçabilite</p>
+        <h2>Toute action sensible laisse une trace dans le journal de securite.</h2>
+    </article>
+</section>
+{% endblock %}

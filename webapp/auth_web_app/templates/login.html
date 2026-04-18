@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Connexion | SecureAuth{% endblock %}
+{% block content %}
+<section class="panel-grid single">
+    <form class="card form-card" method="post">
+        <h1>Connexion</h1>
+        <label>Nom d'utilisateur
+            <input type="text" name="username" required>
+        </label>
+        <label>Mot de passe
+            <input type="password" name="password" required>
+        </label>
+        <button class="button button-primary" type="submit">Verifier et generer OTP</button>
+    </form>
+</section>
+{% endblock %}

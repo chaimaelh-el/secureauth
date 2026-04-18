@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Inscription | SecureAuth{% endblock %}
+{% block content %}
+<section class="panel-grid">
+    <form class="card form-card" method="post">
+        <h1>Inscription</h1>
+        <label>Nom d'utilisateur
+            <input type="text" name="username" required>
+        </label>
+        <label>Email
+            <input type="email" name="email" required>
+        </label>
+        <label>Mot de passe
+            <input id="password-input" type="password" name="password" required>
+        </label>
+        <button class="button button-primary" type="submit">Creer le compte</button>
+    </form>
+
+    <aside class="card password-card">
+        <h2>Analyse du mot de passe</h2>
+        <p id="password-strength-label">Niveau: en attente</p>
+        <p id="password-feedback">Saisissez un mot de passe pour lancer la verification.</p>
+        <ul class="feature-list small-list" id="password-checks">
+            <li>8 caracteres minimum</li>
+            <li>Au moins une majuscule</li>
+            <li>Au moins une minuscule</li>
+            <li>Au moins un chiffre</li>
+            <li>Au moins un caractere special</li>
+        </ul>
+    </aside>
+</section>
+{% endblock %}

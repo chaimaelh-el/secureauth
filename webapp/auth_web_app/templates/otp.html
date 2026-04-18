@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}OTP | SecureAuth{% endblock %}
+{% block content %}
+<section class="panel-grid single">
+    <form class="card form-card" method="post">
+        <h1>Verification OTP</h1>
+        <p>Entrez le code a 6 chiffres avant expiration.</p>
+        <p class="otp-info">📧 Un code a ete envoye a votre adresse email.</p>
+        <p class="countdown" data-remaining="{{ remaining_seconds }}">
+            Temps restant : <span id="countdown-value">{{ remaining_seconds }}</span> secondes
+        </p>
+        <label>Code OTP
+            <input type="text" name="otp_code" maxlength="6" pattern="\d{6}" required>
+        </label>
+        <button class="button button-primary" type="submit">Valider OTP</button>
+    </form>
+</section>
+{% endblock %}

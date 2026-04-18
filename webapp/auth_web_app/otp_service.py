@@ -19,23 +19,13 @@ def generate_otp():
  
 def send_otp_email(recipient_email: str, otp_code: str) -> bool:
     try:
-        resend.Emails.send({
-            "from": "onboarding@resend.dev",
-            "to": recipient_email,
+        params = {
+            "from": "SecureAuth <onboarding@resend.dev>",
+            "to": [recipient_email],
             "subject": "Votre code de vérification SecureAuth",
-            "text": f"""Bonjour,
- 
-Votre code de vérification à usage unique est :
- 
-    {otp_code}
- 
-Ce code est valable 5 minutes.
- 
-Si vous n'avez pas demandé ce code, ignorez cet email.
- 
-— L'équipe SecureAuth
-"""
-        })
+            "text": f"Votre code OTP est : {otp_code}\nValable 5 minutes.",
+        }
+        resend.Emails.send(params)
         return True
     except Exception as e:
         print(f"[RESEND ERROR] {e}")

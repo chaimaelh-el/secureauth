@@ -1,6 +1,7 @@
 import os
 import hmac
 import smtplib
+import threading
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta, timezone
@@ -23,11 +24,8 @@ def generate_otp():
     return f"{_random.randint(0, 999999):06d}"
 
 
-def send_otp_email(recipient_email: str, otp_code: str) -> bool:
-    if not SMTP_USER or not SMTP_PASSWORD:
-        print(f"[DEV] OTP pour {recipient_email} : {otp_code}")
-        return True
-
+def _send_email_thread(recipient_email: str, otp_code: str):
+    """Envoie l'email dans un thread séparé pour ne pas bloquer le serveur."""
     try:
         msg = MIMEMultipart()
         msg["From"] = EMAIL_FROM
@@ -44,23 +42,37 @@ Ce code est valable 5 minutes.
 — L'équipe SecureAuth"""
         msg.attach(MIMEText(body, "plain", "utf-8"))
 
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as server:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=25) as server:
             server.ehlo()
             server.starttls()
             server.login(SMTP_USER, SMTP_PASSWORD)
             server.sendmail(EMAIL_FROM, [recipient_email], msg.as_string())
-        return True
+        print(f"[EMAIL OK] OTP envoyé à {recipient_email}")
     except Exception as e:
         print(f"[EMAIL ERROR] {e}")
-        return False
+
+
+def send_otp_email(recipient_email: str, otp_code: str) -> bool:
+    if not SMTP_USER or not SMTP_PASSWORD:
+        print(f"[DEV] OTP pour {recipient_email} : {otp_code}")
+        return True
+
+    # Envoi dans un thread séparé pour éviter le timeout gunicorn
+    thread = threading.Thread(
+        target=_send_email_thread,
+        args=(recipient_email, otp_code),
+        daemon=True
+    )
+    thread.start()
+    return True
 
 
 def create_and_store_otp(user_id: int, recipient_email: str):
     otp_code = generate_otp()
     expiration = datetime.now(timezone.utc) + timedelta(seconds=OTP_VALIDITY_SECONDS)
     save_otp(user_id, otp_code, expiration.isoformat())
-    success = send_otp_email(recipient_email, otp_code)
-    return success, expiration
+    send_otp_email(recipient_email, otp_code)
+    return True, expiration
 
 
 def validate_otp(user_id: int, submitted_code: str):

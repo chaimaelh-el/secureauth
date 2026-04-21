@@ -35,10 +35,7 @@ app = Flask(__name__)
 # ─────────────────────────────────────────────
 # Configuration de base
 # ─────────────────────────────────────────────
-app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
-if not app.config["SECRET_KEY"]:
-    raise RuntimeError("La variable d'environnement SECRET_KEY doit être définie.")
- 
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev_local_key_123")
 app.config["SESSION_COOKIE_HTTPONLY"] = True   # Inaccessible au JS
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"  # Protection CSRF basique
 app.config["SESSION_COOKIE_SECURE"] = os.environ.get("FLASK_ENV") == "production"

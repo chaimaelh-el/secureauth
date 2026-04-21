@@ -15,7 +15,9 @@
     <div class="page-shell">
         <header class="site-header">
             <a class="brand" href="{{ url_for('index') }}">
-                <span class="brand-mark">S</span>
+                <img src="{{ url_for('static', filename='images/logo.png') }}"
+                     alt="SecureAuth Logo" width="48" height="48"
+                     style="object-fit: contain; border-radius: 8px;">
                 <span class="brand-text">
                     <strong>SecureAuth</strong>
                     <small>Identity control center</small>

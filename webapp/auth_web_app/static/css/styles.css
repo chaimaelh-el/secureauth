@@ -502,3 +502,79 @@ tbody tr:hover {
         grid-template-columns: 1fr;
     }
 }
+.password-field {
+    position: relative;
+}
+
+.password-field input {
+    padding-right: 56px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+
+.password-toggle:hover {
+    background: rgba(211, 93, 49, 0.1);
+    color: var(--accent-dark);
+}
+
+.password-toggle:focus-visible {
+    outline: 2px solid rgba(211, 93, 49, 0.35);
+    outline-offset: 2px;
+}
+
+.eye-icon {
+    position: relative;
+    width: 20px;
+    height: 12px;
+    border: 2px solid currentColor;
+    border-radius: 12px / 8px;
+    display: block;
+}
+
+.eye-icon::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.password-toggle.is-visible .eye-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 2px;
+    background: currentColor;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    border-radius: 999px;
+}
+
+.valid {
+    color: var(--success);
+}
+
+.invalid {
+    color: var(--danger);
+}
+

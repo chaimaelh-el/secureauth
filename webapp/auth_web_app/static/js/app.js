@@ -54,20 +54,18 @@ if (passwordInput) {
 passwordToggles.forEach((toggle) => {
     const passwordField = toggle.closest(".password-field");
     const input = passwordField?.querySelector("input");
+    const eyeOn = toggle.querySelector(".icon-eye");
+    const eyeOff = toggle.querySelector(".icon-eye-off");
 
-    if (!input) {
-        return;
-    }
+    if (!input) return;
 
     toggle.addEventListener("click", () => {
-        const shouldShowPassword = input.type === "password";
-        input.type = shouldShowPassword ? "text" : "password";
-        toggle.setAttribute(
-            "aria-label",
-            shouldShowPassword ? "Masquer le mot de passe" : "Afficher le mot de passe",
-        );
-        toggle.setAttribute("aria-pressed", shouldShowPassword ? "true" : "false");
-        toggle.classList.toggle("is-visible", shouldShowPassword);
+        const show = input.type === "password";
+        input.type = show ? "text" : "password";
+        if (eyeOn) eyeOn.style.display = show ? "none" : "block";
+        if (eyeOff) eyeOff.style.display = show ? "block" : "none";
+        toggle.setAttribute("aria-label", show ? "Masquer le mot de passe" : "Afficher le mot de passe");
+        toggle.setAttribute("aria-pressed", show ? "true" : "false");
     });
 });
 

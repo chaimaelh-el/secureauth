@@ -11,8 +11,20 @@
             <input type="email" name="email" required>
         </label>
         <label>Mot de passe
-            <input id="password-input" type="password" name="password" required>
+            <div class="password-field">
+                <input id="password-input" type="password" name="password" required>
+                <button
+                    class="password-toggle"
+                    type="button"
+                    data-password-toggle
+                    aria-label="Afficher le mot de passe"
+                    aria-pressed="false"
+                >
+                    <span class="eye-icon" aria-hidden="true"></span>
+                </button>
+            </div>
         </label>
+
         <button class="button button-primary" type="submit">Creer le compte</button>
     </form>
 

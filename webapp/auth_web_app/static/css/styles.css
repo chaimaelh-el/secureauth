@@ -578,3 +578,7 @@ tbody tr:hover {
     color: var(--danger);
 }
 
+.g-recaptcha {
+    display: flex;
+    justify-content: center;
+}

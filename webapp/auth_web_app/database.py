@@ -53,6 +53,19 @@ def create_tables():
             )
             """
         )
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS reset_tokens (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                token TEXT NOT NULL UNIQUE,
+                expiration_time TEXT NOT NULL,
+                used INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+            """
+        )
         conn.commit()
 
 
@@ -126,6 +139,20 @@ def update_failed_attempts(user_id, failed_attempts, is_blocked=False):
         conn.commit()
 
 
+def update_password(user_id, new_password_hash):
+    with closing(get_connection()) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            UPDATE users
+            SET password_hash = ?
+            WHERE id = ?
+            """,
+            (new_password_hash, user_id),
+        )
+        conn.commit()
+
+
 def save_log(user_id, action, status, details):
     with closing(get_connection()) as conn:
         cursor = conn.cursor()
@@ -176,6 +203,44 @@ def delete_otp(user_id):
         conn.commit()
 
 
+def save_reset_token(user_id, token, expiration_time):
+    with closing(get_connection()) as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM reset_tokens WHERE user_id = ?", (user_id,))
+        cursor.execute(
+            """
+            INSERT INTO reset_tokens (user_id, token, expiration_time)
+            VALUES (?, ?, ?)
+            """,
+            (user_id, token, expiration_time),
+        )
+        conn.commit()
+
+
+def get_reset_token(token):
+    with closing(get_connection()) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT id, user_id, token, expiration_time, used
+            FROM reset_tokens
+            WHERE token = ?
+            """,
+            (token,),
+        )
+        return cursor.fetchone()
+
+
+def mark_reset_token_used(token):
+    with closing(get_connection()) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE reset_tokens SET used = 1 WHERE token = ?",
+            (token,),
+        )
+        conn.commit()
+
+
 def get_recent_logs(limit=50):
     with closing(get_connection()) as conn:
         cursor = conn.cursor()
@@ -190,3 +255,4 @@ def get_recent_logs(limit=50):
             (limit,),
         )
         return cursor.fetchall()
+    

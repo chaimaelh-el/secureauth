@@ -10,13 +10,7 @@
         <label>Mot de passe
             <div class="password-field">
                 <input id="login-password-input" type="password" name="password" required>
-                <button
-                    class="password-toggle"
-                    type="button"
-                    data-password-toggle
-                    aria-label="Afficher le mot de passe"
-                    aria-pressed="false"
-                >
+                <button class="password-toggle" type="button" data-password-toggle aria-label="Afficher le mot de passe" aria-pressed="false">
                     <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
                         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
                         <circle cx="12" cy="12" r="3"/>
@@ -27,12 +21,15 @@
                         <line x1="1" y1="1" x2="23" y2="23"/>
                     </svg>
                 </button>
-                    <span class="eye-icon" aria-hidden="true"></span>
-                </button>
             </div>
         </label>
 
-        <button class="button button-primary" type="submit">Verifier et generer OTP</button>
+        <!-- reCAPTCHA -->
+        <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+
+        <button class="button button-primary" type="submit">Vérifier et générer OTP</button>
+        <a href="{{ url_for('forgot_password') }}" style="text-align:center; color: var(--muted); font-size: 0.9rem;">Mot de passe oublié ?</a>
     </form>
 </section>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}

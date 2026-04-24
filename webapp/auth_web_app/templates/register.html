@@ -13,32 +13,42 @@
         <label>Mot de passe
             <div class="password-field">
                 <input id="password-input" type="password" name="password" required>
-                <button
-                    class="password-toggle"
-                    type="button"
-                    data-password-toggle
-                    aria-label="Afficher le mot de passe"
-                    aria-pressed="false"
-                >
-                    <span class="eye-icon" aria-hidden="true"></span>
+                <button class="password-toggle" type="button" data-password-toggle aria-label="Afficher le mot de passe" aria-pressed="false">
+                    <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <svg class="icon-eye-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" style="display:none">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-10-7-10-7a10.07 10.07 0 0 1 2.06-3.06"/>
+                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 7 10 7a10.07 10.07 0 0 1-1.64 2.29"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
                 </button>
             </div>
         </label>
 
-        <button class="button button-primary" type="submit">Creer le compte</button>
+        <button type="button" id="generate-password-btn" class="button button-secondary">
+            🔑 Générer un mot de passe sécurisé
+        </button>
+
+        
+        <div class="g-recaptcha" style="display:flex; justify-content:center;" data-sitekey="{{ recaptcha_site_key }}"></div>
+
+        <button class="button button-primary" type="submit">Créer le compte</button>
     </form>
 
     <aside class="card password-card">
         <h2>Analyse du mot de passe</h2>
         <p id="password-strength-label">Niveau: en attente</p>
-        <p id="password-feedback">Saisissez un mot de passe pour lancer la verification.</p>
+        <p id="password-feedback">Saisissez un mot de passe pour lancer la vérification.</p>
         <ul class="feature-list small-list" id="password-checks">
-            <li>8 caracteres minimum</li>
+            <li>8 caractères minimum</li>
             <li>Au moins une majuscule</li>
             <li>Au moins une minuscule</li>
             <li>Au moins un chiffre</li>
-            <li>Au moins un caractere special</li>
+            <li>Au moins un caractère spécial</li>
         </ul>
     </aside>
 </section>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}

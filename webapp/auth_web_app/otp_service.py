@@ -12,22 +12,40 @@ from database import delete_otp, get_otp, save_otp
 OTP_VALIDITY_SECONDS = 300  # 5 minutes
 _random = SystemRandom()
 
-GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS", "robinapimail@gmail.com")
-GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "lwmd iweg zhml eqsh")
+GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS")
+GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD")
 
 
 def generate_otp():
     return f"{_random.randint(0, 999999):06d}"
 
 
-def send_otp_email(recipient_email: str, otp_code: str) -> bool:
+def send_otp_email(recipient_email: str, body: str, subject: str = "Votre code de vérification SecureAuth") -> bool:
     try:
         msg = MIMEMultipart("alternative")
-        msg["Subject"] = "Votre code de vérification SecureAuth"
+        msg["Subject"] = subject
         msg["From"] = GMAIL_ADDRESS
         msg["To"] = recipient_email
+        msg.attach(MIMEText(body, "plain"))
 
-        body = f"""Bonjour,
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
+            server.sendmail(GMAIL_ADDRESS, recipient_email, msg.as_string())
+
+        print(f"[EMAIL] Envoyé à {recipient_email}")
+        return True
+
+    except Exception as e:
+        print(f"[EMAIL ERROR] {e}")
+        return False
+
+
+def create_and_store_otp(user_id: int, recipient_email: str):
+    otp_code = generate_otp()
+    expiration = datetime.now(timezone.utc) + timedelta(seconds=OTP_VALIDITY_SECONDS)
+    save_otp(user_id, otp_code, expiration.isoformat())
+
+    body = f"""Bonjour,
 
 Votre code de vérification à usage unique est :
 
@@ -39,25 +57,7 @@ Si vous n'avez pas demandé ce code, ignorez cet email.
 
 — L'équipe SecureAuth
 """
-        msg.attach(MIMEText(body, "plain"))
-
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
-            server.sendmail(GMAIL_ADDRESS, recipient_email, msg.as_string())
-
-        print(f"[OTP] Email envoyé à {recipient_email}")
-        return True
-
-    except Exception as e:
-        print(f"[OTP ERROR] {e}")
-        return False
-
-
-def create_and_store_otp(user_id: int, recipient_email: str):
-    otp_code = generate_otp()
-    expiration = datetime.now(timezone.utc) + timedelta(seconds=OTP_VALIDITY_SECONDS)
-    save_otp(user_id, otp_code, expiration.isoformat())
-    success = send_otp_email(recipient_email, otp_code)
+    success = send_otp_email(recipient_email, body)
     return success, expiration
 
 
